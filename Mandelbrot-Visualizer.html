@@ -1,0 +1,947 @@
+<div id="glowscript" class="glowscript">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="https://www.glowscript.org/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+<link type="text/css" href="https://www.glowscript.org/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/glow.3.2.min.js"></script>
+<script type="text/javascript" src="https://www.glowscript.org/package/RSrun.3.2.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {;
+var ρσ_modules = {};
+var mouse_1_up, mandelbrot;
+ρσ_modules.pythonize = {};
+
+(function(){
+    function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+            exclude = (function(){
+                var s = ρσ_set();
+                s.jsset.add("split");
+                s.jsset.add("replace");
+                return s;
+            })();
+        } else if (arguments[0]) {
+            exclude = Array.prototype.slice.call(arguments);
+        } else {
+            exclude = null;
+        }
+        if (exclude) {
+            string_funcs = string_funcs.difference(set(exclude));
+        }
+        var ρσ_Iter0 = string_funcs;
+        ρσ_Iter0 = ((typeof ρσ_Iter0[Symbol.iterator] === "function") ? (ρσ_Iter0 instanceof Map ? ρσ_Iter0.keys() : ρσ_Iter0) : Object.keys(ρσ_Iter0));
+        for (var ρσ_Index0 of ρσ_Iter0) {
+            name = ρσ_Index0;
+            (ρσ_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name] = (ρσ_expr_temp = ρσ_str.prototype)[(typeof name === "number" && name < 0) ? ρσ_expr_temp.length + name : name];
+        }
+    };
+    if (!strings.__module__) Object.defineProperties(strings, {
+        __module__ : {value: "pythonize"}
+    });
+
+    ρσ_modules.pythonize.strings = strings;
+})();
+async function __main__() {
+"use strict";
+    var display = canvas;
+    var scene = canvas();
+
+    function round(num, n=0) {return Number(num.toFixed(n))}
+
+    function input(arg) {
+    	arg = arg || {}
+    	if (arg.prompt !== undefined && arg.prompt != '') return prompt(arg.prompt)
+    	else if (typeof arg === 'string') return prompt(arg)
+    	else return prompt()
+    }
+    fontloading();
+    await waitforfonts();
+
+    var version, print, arange, __name__, type, ρσ_ls, scene, about_me, resolution_choices, resolution_choices_str, colormap_choices, mouse_1_up, loading_text, _GS_1, mandelbrot, screenshot_button, undo_dimension_change_button, redo_dimension_change_button, colormap_menu, image_resolution_menu, mandel_search_depth_winput, dimensions_display_winput;
+    version = ρσ_list_decorate([ "3.2", "glowscript" ]);
+    Array.prototype['+'] = function(r) {return this.concat(r)}
+    Array.prototype['*'] = function(r) {return __array_times_number(this, r)}
+    window.__GSlang = "vpython";
+    print = GSprint;
+    arange = range;
+    __name__ = "__main__";
+    type = pytype;
+    var strings = ρσ_modules.pythonize.strings;
+
+    strings();
+    "15";
+    scene = ρσ_interpolate_kwargs.call(this, display, [ρσ_desugar_kwargs({width: 900, height: 600})]);
+    "16";
+    scene.bind("mousedown", resize_box);
+    "17";
+    scene.bind("mouseup", release_mouse_1);
+    "18";
+    scene.userzoom = false;
+    "19";
+    scene.userspin = false;
+    "20";
+    scene.userpan = false;
+    (await sleep(.1));
+    "21";
+    scene.autoscale = false;
+    "46";
+    about_me = "\n            Highlight an area to zoom using <b>left-click and drag<\/b>. To go back to the \n    previous view, click <b>Undo</b>, or use <b>Redo</b> to step forward again. Higher image\n    resolutions are computationally expensive. If loading takes too long, try selecting a \n    lower resolution for faster rendering. You can also adjust the <b>Depth</b>, which sets\n    how many iterations are used to determine whether a point escapes the Mandelbrot set. \n    Higher values reveal finer detail but increase render time—though not as drastically as\n    higher resolutions do. When zooming, the white frame represents the new region which \n    will be zoomed into.\n\n            I've recreated some of my favorite MATLAB colormaps here. One of them—my \n    \"spectral\" scheme—is custom made and looks especially vivid at high iteration \n    depths. As you continue zooming, you'll eventually reach a limit where the image \n    breaks into large pixels, followed by a smooth, empty void. This boundary is due \n    to floating-point precision limits. I've implemented a few techniques to extend \n    this range, but a more robust fix would require a high-precision JS math library. \n    Since that would slow everything down and isn't the goal of this project, I've \n    left it out for now. I would be open to implementing this as well as the option\n    to view other types of Mandelbrot sets.\n\n    I'll add a GitHub link here later.\n\n                -<i>Created by Maximillian DeMarr</i>\n";
+    "48";
+    scene.caption = about_me;
+    "49";
+    MathJax.Hub.Queue(ρσ_list_decorate([ "Typeset", MathJax.Hub, scene.caption ]));
+    "50";
+    scene.append_to_title("<div id='fps'/>");
+    "64";
+    async function colormaps() {
+        var colors = (arguments[0] === undefined || ( 0 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? colormaps.__defaults__.colors : arguments[0];
+        var cmap = (arguments[1] === undefined || ( 1 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? colormaps.__defaults__.cmap : arguments[1];
+        var ρσ_kwargs_obj = arguments[arguments.length["-"](1)];
+        if (ρσ_kwargs_obj === null || typeof ρσ_kwargs_obj !== "object" || ρσ_kwargs_obj [ρσ_kwargs_symbol] !== true) ρσ_kwargs_obj = {};
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "colors")){
+            colors = ρσ_kwargs_obj.colors;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "cmap")){
+            cmap = ρσ_kwargs_obj.cmap;
+        }
+        var ρσ_ls, R, G, B;
+        "85";
+        if ((cmap === "spectral" || typeof cmap === "object" && ρσ_equals(cmap, "spectral"))) {
+            "87";
+            R = abs(sin(100["*"](colors.x)["+"](1)));
+            "88";
+            G = sin(100["*"](colors.y)["+"](2));
+            "89";
+            B = sin(100["*"](colors.z)["+"](3));
+            "90";
+            return vec(R, G, B);
+            "92";
+        } else if ((cmap === "inferno" || typeof cmap === "object" && ρσ_equals(cmap, "inferno"))) {
+            "94";
+            R = sqrt(colors.x);
+            "95";
+            G = Math.pow(colors.y, 2);
+            "96";
+            B = 1["-u"]()["*"](5)["*"](Math.pow((colors.z["-"](1["*"](.2))), 2))["+"](.2);
+            "97";
+            return vec(R, G, B);
+            "99";
+        } else if ((cmap === "viridis" || typeof cmap === "object" && ρσ_equals(cmap, "viridis"))) {
+            "101";
+            R = Math.pow(sin(colors.x["+"](.5)), 16);
+            "102";
+            G = colors.y;
+            "103";
+            B = 1["-u"]()["*"](3)["*"](Math.pow((colors.z["-"](1["*"](.38))), 2))["+"](.6);
+            "104";
+            return vec(R, G, B);
+            "106";
+        } else if ((cmap === "plasma" || typeof cmap === "object" && ρσ_equals(cmap, "plasma"))) {
+            "108";
+            R = sin(colors.x);
+            "109";
+            G = Math.pow(colors.y, 10)["+"](Math.pow(colors.y, (1["/"](6))))["-"](1["*"](.8));
+            "110";
+            B = 1["-u"]()["*"](colors.z)["+"](1);
+            "111";
+            return vec(R, G, B);
+            "113";
+        } else {
+            "115";
+            R = Math.pow(sin(colors.x["+"](.9)), 30);
+            "116";
+            G = Math.pow(sin(colors.y["+"](.97)), 80)["*"](.9);
+            "117";
+            B = 1["-u"]()["*"](Math.pow((Math.pow((colors.z["+"](.5)), 6)["-"](1["*"](.8))), 2))["+"](1);
+            "118";
+            return vec(R, G, B);
+        }
+    };
+    if (!colormaps.__defaults__) Object.defineProperties(colormaps, {
+        __defaults__ : {value: {colors:vec(0, 0, 0), cmap:"default"}},
+        __handles_kwarg_interpolation__ : {value: true},
+        __argnames__ : {value: ["colors", "cmap"]},
+        __module__ : {value: null}
+    });
+
+    "121";
+    async function split() {
+        var string = (arguments[0] === undefined || ( 0 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? split.__defaults__.string : arguments[0];
+        var separator = (arguments[1] === undefined || ( 1 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? split.__defaults__.separator : arguments[1];
+        var ρσ_kwargs_obj = arguments[arguments.length["-"](1)];
+        if (ρσ_kwargs_obj === null || typeof ρσ_kwargs_obj !== "object" || ρσ_kwargs_obj [ρσ_kwargs_symbol] !== true) ρσ_kwargs_obj = {};
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "string")){
+            string = ρσ_kwargs_obj.string;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "separator")){
+            separator = ρσ_kwargs_obj.separator;
+        }
+        var ρσ_ls, split_string, current_word, s;
+        "140";
+        if (string === null) {
+            "141";
+            return ρσ_list_decorate([]);
+        }
+        "143";
+        split_string = ρσ_list_decorate([]);
+        "144";
+        current_word = "";
+        "146";
+        var ρσ_Iter1 = string;
+        ρσ_Iter1 = ((typeof ρσ_Iter1[Symbol.iterator] === "function") ? (ρσ_Iter1 instanceof Map ? ρσ_Iter1.keys() : ρσ_Iter1) : Object.keys(ρσ_Iter1));
+        for (var ρσ_Index1 of ρσ_Iter1) {
+            s = ρσ_Index1;
+            "147";
+            if ((s === separator || typeof s === "object" && ρσ_equals(s, separator))) {
+                "148";
+                split_string.append(current_word);
+                "149";
+                current_word = "";
+                "150";
+            } else {
+                "151";
+                current_word=current_word["+"](s);
+            }
+        }
+        "154";
+        split_string.append(current_word);
+        "155";
+        return split_string;
+    };
+    if (!split.__defaults__) Object.defineProperties(split, {
+        __defaults__ : {value: {string:null, separator:" "}},
+        __handles_kwarg_interpolation__ : {value: true},
+        __argnames__ : {value: ["string", "separator"]},
+        __module__ : {value: null}
+    });
+
+    "167";
+    async function resize_box(evt) {
+        var ρσ_ls, starting_mouse_pos, opposite_corner_pos, mouse_window_curve, highlighting_curve, current_mouse_pos, x_min, x_max, y_min, y_max, image_width, image_height, current_box_width, current_box_height, corner_sign_x, corner_sign_y;
+        "184";
+        "186";
+        if (!mandelbrot.loaded) {
+            "187";
+            return;
+        }
+        "189";
+        mouse_1_up = false;
+        "192";
+        starting_mouse_pos = ρσ_interpolate_kwargs.call(scene.mouse, scene.mouse.project, [ρσ_desugar_kwargs({normal: vec(0, 0, 1), point: vec(1, 1, 0)})]);
+        "193";
+        opposite_corner_pos = starting_mouse_pos;
+        "196";
+        mouse_window_curve = ρσ_interpolate_kwargs.call(this, curve, [ρσ_desugar_kwargs({pos: ρσ_list_decorate([ starting_mouse_pos ])["*"](5), color: color.red, radius: 0})]);
+        "201";
+        highlighting_curve = ρσ_interpolate_kwargs.call(this, curve, [ρσ_desugar_kwargs({pos: ρσ_list_decorate([ starting_mouse_pos ])["*"](5), color: color.white, radius: 0})]);
+        "207";
+        while (true) {
+            "208";
+            (await rate(10));
+            "210";
+            current_mouse_pos = ρσ_interpolate_kwargs.call(scene.mouse, scene.mouse.project, [ρσ_desugar_kwargs({normal: vec(0, 0, 1), point: vec(1, 1, 0)})]);
+            "213";
+            if (mouse_1_up) {
+                "215";
+                mouse_window_curve.visible = false;
+                "216";
+                highlighting_curve.visible = false;
+                "219";
+                x_min = min(starting_mouse_pos.x, opposite_corner_pos.x)["+"](mandelbrot.width["/"](2));
+                "220";
+                x_max = max(starting_mouse_pos.x, opposite_corner_pos.x)["+"](mandelbrot.width["/"](2));
+                "221";
+                y_min = min(starting_mouse_pos.y, opposite_corner_pos.y)["+"](mandelbrot.height["/"](2));
+                "222";
+                y_max = max(starting_mouse_pos.y, opposite_corner_pos.y)["+"](mandelbrot.height["/"](2));
+                "225";
+                image_width = mandelbrot.x_max["-"](1["*"](mandelbrot.x_min));
+                "226";
+                image_height = mandelbrot.y_max["-"](1["*"](mandelbrot.y_min));
+                "228";
+                x_min = image_width["/"](mandelbrot.width)["*"](x_min)["+"](mandelbrot.x_min);
+                "229";
+                x_max = image_width["/"](mandelbrot.width)["*"](x_max)["+"](mandelbrot.x_min);
+                "230";
+                y_min = image_height["/"](mandelbrot.height)["*"](y_min)["+"](mandelbrot.y_min);
+                "231";
+                y_max = image_height["/"](mandelbrot.height)["*"](y_max)["+"](mandelbrot.y_min);
+                "234";
+                ρσ_interpolate_kwargs.call(mandelbrot, mandelbrot.change_parameters, [ρσ_desugar_kwargs({max_iter: mandelbrot.max_iter, image_dimensions: ρσ_list_decorate([ x_min, x_max, y_min, y_max ]), resolution: ρσ_list_decorate([ mandelbrot.height, mandelbrot.width ]), colormap: mandelbrot.colormap})]);
+                "242";
+                undo_dimension_change_button.background = color.white;
+                "243";
+                break;
+            }
+            "247";
+            current_box_width = abs(current_mouse_pos.x["-"](1["*"](starting_mouse_pos.x)));
+            "248";
+            current_box_height = abs(current_mouse_pos.y["-"](1["*"](starting_mouse_pos.y)));
+            "251";
+            corner_sign_x = (current_mouse_pos.x[">"](starting_mouse_pos.x)) ? 1 : 1["-u"]()["*"](1);
+            "252";
+            corner_sign_y = (current_mouse_pos.y[">"](starting_mouse_pos.y)) ? 1 : 1["-u"]()["*"](1);
+            "255";
+            if (current_box_height["/"](current_box_width)[">"](3["/"](2))) {
+                "257";
+                opposite_corner_pos = vec(starting_mouse_pos.x["+"](corner_sign_x["*"](current_box_height)["*"](3)["/"](2)), current_mouse_pos.y, 0);
+                "262";
+            } else {
+                "264";
+                opposite_corner_pos = vec(current_mouse_pos.x, starting_mouse_pos.y["+"](corner_sign_y["*"](current_box_width)["*"](2)["/"](3)), 0);
+            }
+            "271";
+            ρσ_interpolate_kwargs.call(mouse_window_curve, mouse_window_curve.modify, [1].concat([ρσ_desugar_kwargs({pos: vec(current_mouse_pos.x, starting_mouse_pos.y, 0)})]));
+            "272";
+            ρσ_interpolate_kwargs.call(mouse_window_curve, mouse_window_curve.modify, [2].concat([ρσ_desugar_kwargs({pos: current_mouse_pos})]));
+            "273";
+            ρσ_interpolate_kwargs.call(mouse_window_curve, mouse_window_curve.modify, [3].concat([ρσ_desugar_kwargs({pos: vec(starting_mouse_pos.x, current_mouse_pos.y, 0)})]));
+            "274";
+            ρσ_interpolate_kwargs.call(mouse_window_curve, mouse_window_curve.modify, [4].concat([ρσ_desugar_kwargs({pos: starting_mouse_pos})]));
+            "277";
+            ρσ_interpolate_kwargs.call(highlighting_curve, highlighting_curve.modify, [1].concat([ρσ_desugar_kwargs({pos: vec(opposite_corner_pos.x, starting_mouse_pos.y, 0)})]));
+            "278";
+            ρσ_interpolate_kwargs.call(highlighting_curve, highlighting_curve.modify, [2].concat([ρσ_desugar_kwargs({pos: opposite_corner_pos})]));
+            "279";
+            ρσ_interpolate_kwargs.call(highlighting_curve, highlighting_curve.modify, [3].concat([ρσ_desugar_kwargs({pos: vec(starting_mouse_pos.x, opposite_corner_pos.y, 0)})]));
+            "280";
+            ρσ_interpolate_kwargs.call(highlighting_curve, highlighting_curve.modify, [4].concat([ρσ_desugar_kwargs({pos: starting_mouse_pos})]));
+        }
+    };
+    if (!resize_box.__argnames__) Object.defineProperties(resize_box, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "283";
+    async function release_mouse_1(evt) {
+        "296";
+        "297";
+        mouse_1_up = true;
+    };
+    if (!release_mouse_1.__argnames__) Object.defineProperties(release_mouse_1, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "300";
+    async function recall_mandelbrot_dimensions(evt) {
+        var ρσ_ls, max_iter, resolution, colormap;
+        "314";
+        "315";
+        if (!mandelbrot.loaded) {
+            "316";
+            return;
+            "317";
+        } else if (ρσ_equals(len(mandelbrot.dimensions_undo_list), 1) && ρσ_equals(len(mandelbrot.dimensions_redo_list), 0)) {
+            "319";
+            return;
+        }
+        "322";
+        max_iter = mandelbrot.max_iter;
+        "323";
+        resolution = ρσ_list_decorate([ mandelbrot.height, mandelbrot.width ]);
+        "324";
+        colormap = mandelbrot.colormap;
+        "327";
+        ρσ_interpolate_kwargs.call(mandelbrot, mandelbrot.load_recent_dimensions, [ρσ_desugar_kwargs({redo: evt.redo, max_iter: max_iter, resolution: resolution, colormap: colormap})]);
+        "333";
+        (await sleep(.1));
+        "336";
+        if (evt.redo) {
+            "338";
+            if (ρσ_equals(len(mandelbrot.dimensions_redo_list), 0)) {
+                "339";
+                evt.background = vec(.8, .8, .8);
+                "340";
+                evt.pointer_to_undo.background = color.white;
+                "341";
+            } else {
+                "342";
+                evt.background = color.white;
+                "343";
+                evt.pointer_to_undo.background = color.white;
+                "344";
+            }
+        } else {
+            "346";
+            if (len(mandelbrot.dimensions_undo_list)["<"](2)) {
+                "347";
+                evt.background = vec(.8, .8, .8);
+                "348";
+                evt.pointer_to_redo.background = color.white;
+                "349";
+            } else {
+                "350";
+                evt.background = color.white;
+                "351";
+                evt.pointer_to_redo.background = color.white;
+            }
+        }
+    };
+    if (!recall_mandelbrot_dimensions.__argnames__) Object.defineProperties(recall_mandelbrot_dimensions, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "354";
+    async function change_resolution(evt) {
+        var ρσ_ls, max_iter, image_dimensions, resolution, colormap;
+        "367";
+        "368";
+        if (!mandelbrot.loaded) {
+            "369";
+            return;
+        }
+        "371";
+        max_iter = mandelbrot.max_iter;
+        "372";
+        image_dimensions = mandelbrot.dimensions_undo_list.pypop();
+        "373";
+        resolution = ρσ_getitem(resolution_choices, evt.index);
+        "374";
+        colormap = mandelbrot.colormap;
+        "376";
+        ρσ_interpolate_kwargs.call(mandelbrot, mandelbrot.change_parameters, [ρσ_desugar_kwargs({max_iter: max_iter, image_dimensions: image_dimensions, resolution: resolution, colormap: colormap})]);
+    };
+    if (!change_resolution.__argnames__) Object.defineProperties(change_resolution, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "384";
+    async function change_colormap(evt) {
+        var ρσ_ls, max_iter, image_dimensions, resolution, colormap;
+        "396";
+        "397";
+        if (!mandelbrot.loaded) {
+            "398";
+            return;
+        }
+        "400";
+        max_iter = mandelbrot.max_iter;
+        "401";
+        image_dimensions = mandelbrot.dimensions_undo_list.pypop();
+        "402";
+        resolution = ρσ_list_decorate([ mandelbrot.height, mandelbrot.width ]);
+        "403";
+        colormap = evt.selected;
+        "405";
+        ρσ_interpolate_kwargs.call(mandelbrot, mandelbrot.change_parameters, [ρσ_desugar_kwargs({max_iter: max_iter, image_dimensions: image_dimensions, resolution: resolution, colormap: colormap})]);
+    };
+    if (!change_colormap.__argnames__) Object.defineProperties(change_colormap, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "413";
+    async function change_search_depth(evt) {
+        var ρσ_ls, max_iter, image_dimensions, resolution, colormap;
+        "427";
+        "428";
+        if (!mandelbrot.loaded) {
+            "429";
+            return;
+            "431";
+        }
+        if (evt.number["<"](1) || evt.number[">"](1e3)) {
+            "432";
+            print("Please enter a number between 1 - 1000");
+            "433";
+            return;
+        }
+        "435";
+        max_iter = int(evt.number);
+        "436";
+        image_dimensions = mandelbrot.dimensions_undo_list.pypop();
+        "437";
+        resolution = ρσ_list_decorate([ mandelbrot.height, mandelbrot.width ]);
+        "438";
+        colormap = mandelbrot.colormap;
+        "440";
+        ρσ_interpolate_kwargs.call(mandelbrot, mandelbrot.change_parameters, [ρσ_desugar_kwargs({max_iter: max_iter, image_dimensions: image_dimensions, resolution: resolution, colormap: colormap})]);
+    };
+    if (!change_search_depth.__argnames__) Object.defineProperties(change_search_depth, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "448";
+    async function change_image_dimensions(evt) {
+        var ρσ_ls, split_elements, item;
+        "469";
+        "470";
+        if (!mandelbrot.loaded) {
+            "471";
+            return;
+        }
+        "473";
+        try {
+            "475";
+            split_elements = (await split(evt.text, ","));
+            "476";
+            split_elements = (function() {
+                var ρσ_Iter = split_elements, ρσ_Result = [], item;
+                ρσ_Iter = ((typeof ρσ_Iter[Symbol.iterator] === "function") ? (ρσ_Iter instanceof Map ? ρσ_Iter.keys() : ρσ_Iter) : Object.keys(ρσ_Iter));
+                for (var ρσ_Index of ρσ_Iter) {
+                    item = ρσ_Index;
+                    ρσ_Result.push(float(item));
+                }
+                ρσ_Result = ρσ_list_constructor(ρσ_Result);
+                return ρσ_Result;
+            })();
+            "479";
+            if (ρσ_not_equals(len(split_elements), 4)) {
+                "480";
+                throw new (await ValueError("Must provide exactly four numbers."));
+                "481";
+            }
+            if (ρσ_getitem(split_elements, 0)[">="](ρσ_getitem(split_elements, 1)) || ρσ_getitem(split_elements, 2)[">="](ρσ_getitem(split_elements, 3))) {
+                "482";
+                throw new (await ValueError("Invalid bounds: x_min ≥ x_max or y_min ≥ y_max."));
+                "483";
+            }
+        } catch (ρσ_Exception) {
+            ρσ_last_exception = ρσ_Exception;
+            {
+                "484";
+                print("Invalid dimensions.");
+                "485";
+                return;
+            } 
+        }
+        "488";
+        ρσ_interpolate_kwargs.call(mandelbrot, mandelbrot.change_parameters, [ρσ_desugar_kwargs({max_iter: mandelbrot.max_iter, image_dimensions: split_elements, resolution: ρσ_list_decorate([ mandelbrot.height, mandelbrot.width ]), colormap: mandelbrot.colormap})]);
+    };
+    if (!change_image_dimensions.__argnames__) Object.defineProperties(change_image_dimensions, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "496";
+    async function screen_capture(evt) {
+        "500";
+        (await scene.capture("mandelbrot_screenshot"));
+    };
+    if (!screen_capture.__argnames__) Object.defineProperties(screen_capture, {
+        __argnames__ : {value: ["evt"]},
+        __module__ : {value: null}
+    });
+
+    "514";
+    function Mandelbrot() {;
+    }
+    Mandelbrot.prototype.__init__ = async function __init__() {
+        var self = this;
+        var imaginary_function = (arguments[0] === undefined || ( 0 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? __init__.__defaults__.imaginary_function : arguments[0];
+        var max_iter = (arguments[1] === undefined || ( 1 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? __init__.__defaults__.max_iter : arguments[1];
+        var image_dimensions = (arguments[2] === undefined || ( 2 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? __init__.__defaults__.image_dimensions : arguments[2];
+        var resolution = (arguments[3] === undefined || ( 3 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? __init__.__defaults__.resolution : arguments[3];
+        var colormap = (arguments[4] === undefined || ( 4 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? __init__.__defaults__.colormap : arguments[4];
+        var ρσ_kwargs_obj = arguments[arguments.length["-"](1)];
+        if (ρσ_kwargs_obj === null || typeof ρσ_kwargs_obj !== "object" || ρσ_kwargs_obj [ρσ_kwargs_symbol] !== true) ρσ_kwargs_obj = {};
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "imaginary_function")){
+            imaginary_function = ρσ_kwargs_obj.imaginary_function;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "max_iter")){
+            max_iter = ρσ_kwargs_obj.max_iter;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "image_dimensions")){
+            image_dimensions = ρσ_kwargs_obj.image_dimensions;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "resolution")){
+            resolution = ρσ_kwargs_obj.resolution;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "colormap")){
+            colormap = ρσ_kwargs_obj.colormap;
+        }
+        "537";
+        self.max_iter = max_iter;
+        "538";
+        self.x_min = ρσ_getitem(image_dimensions, 0);
+        "539";
+        self.x_max = ρσ_getitem(image_dimensions, 1);
+        "540";
+        self.y_min = ρσ_getitem(image_dimensions, 2);
+        "541";
+        self.y_max = ρσ_getitem(image_dimensions, 3);
+        "542";
+        self.height = ρσ_getitem(resolution, 0);
+        "543";
+        self.width = ρσ_getitem(resolution, 1);
+        "544";
+        self.colormap = colormap;
+        "548";
+        self.rendered_vertices = ρσ_list_decorate([]);
+        "549";
+        self.existing_vertices = ρσ_list_decorate([]);
+        "550";
+        self.rendered_quads = ρσ_list_decorate([]);
+        "551";
+        self.existing_quads = ρσ_list_decorate([]);
+        "554";
+        self.dimensions_undo_list = ρσ_list_decorate([ image_dimensions ]);
+        "555";
+        self.dimensions_redo_list = ρσ_list_decorate([]);
+        "558";
+        (await self.__load_fresh_objects(self.height["*"](self.width)));
+        "559";
+        (await self.__load_new_mandelbrot());
+    };
+    if (!Mandelbrot.prototype.__init__.__defaults__) Object.defineProperties(Mandelbrot.prototype.__init__, {
+        __defaults__ : {value: {imaginary_function:null, max_iter:100, image_dimensions:ρσ_list_decorate([ 1["-u"]()["*"](2), .5, 1["-u"]()["*"](1), 1 ]), resolution:ρσ_list_decorate([ 30, 45 ]), colormap:"default"}},
+        __handles_kwarg_interpolation__ : {value: true},
+        __argnames__ : {value: ["imaginary_function", "max_iter", "image_dimensions", "resolution", "colormap"]},
+        __module__ : {value: null}
+    });
+    Mandelbrot.__argnames__ = Mandelbrot.prototype.__init__.__argnames__;
+    Mandelbrot.__handles_kwarg_interpolation__ = Mandelbrot.prototype.__init__.__handles_kwarg_interpolation__;
+    Mandelbrot.prototype.__load_new_mandelbrot = async function __load_new_mandelbrot() {
+        var self = this;
+        var ρσ_ls, center_x, center_y, view_width, view_height, zoom_x, zoom_y, current_col, previous_col, x, y, ρσ_unpack, c_re, c_im, z_re, z_im, n, z_re_old, pixel_color, color_value, old_vertex, pixel, py, px;
+        "574";
+        self.loaded = false;
+        "577";
+        center_x = self.x_min["+"](self.x_max)["/"](2);
+        "578";
+        center_y = self.y_min["+"](self.y_max)["/"](2);
+        "579";
+        view_width = self.x_max["-"](1["*"](self.x_min));
+        "580";
+        view_height = self.y_max["-"](1["*"](self.y_min));
+        "583";
+        zoom_x = view_width["/"](self.width);
+        "584";
+        zoom_y = view_height["/"](self.height);
+        "587";
+        current_col = ρσ_list_decorate([ null ])["*"](self.height);
+        "588";
+        previous_col = current_col.slice(0);
+        "591";
+        for (var ρσ_Index2 = 0; ρσ_Index2["<"](self.width); ρσ_Index2++) {
+            px = ρσ_Index2;
+            "592";
+            for (var ρσ_Index3 = 0; ρσ_Index3["<"](self.height); ρσ_Index3++) {
+                py = ρσ_Index3;
+                "594";
+                x = center_x["+"](px["-"](1["*"](self.width)["/"](2))["*"](zoom_x));
+                "595";
+                y = center_y["+"](py["-"](1["*"](self.height)["/"](2))["*"](zoom_y));
+                "598";
+                ρσ_unpack = [x, y];
+                c_re = ρσ_unpack[0];
+                c_im = ρσ_unpack[1];
+                "599";
+                ρσ_unpack = [0, 0];
+                z_re = ρσ_unpack[0];
+                z_im = ρσ_unpack[1];
+                "600";
+                n = 0;
+                "601";
+                while (sqrt(Math.pow(z_re, 2)["+"](Math.pow(z_im, 2)))["<="](2) && n["<"](self.max_iter)) {
+                    "602";
+                    z_re_old = z_re;
+                    "603";
+                    z_re = z_re_old["*"](z_re_old)["-"](1["*"](z_im)["*"](z_im))["+"](c_re);
+                    "604";
+                    z_im = 2["*"](z_re_old)["*"](z_im)["+"](c_im);
+                    "605";
+                    n=n["+"](1);
+                    "608";
+                }
+                if ((n === self.max_iter || typeof n === "object" && ρσ_equals(n, self.max_iter))) {
+                    "609";
+                    pixel_color = vec(0, 0, 0);
+                    "610";
+                } else {
+                    "611";
+                    color_value = vec(1, 1, 1)["*"](n["/"](self.max_iter));
+                    "612";
+                    pixel_color = await ρσ_list_decorate(ρσ_interpolate_kwargs.call(this, colormaps, [ρσ_desugar_kwargs({colors: color_value, cmap: self.colormap})]));
+                }
+                "615";
+                old_vertex = self.existing_vertices.pypop();
+                "616";
+                old_vertex.pos = vec(px["-"](1["*"](self.width)["/"](2)), py["-"](1["*"](self.height)["/"](2)), 0);
+                "617";
+                old_vertex.color = pixel_color;
+                "618";
+                ρσ_setitem(current_col, py, old_vertex);
+                "619";
+                self.rendered_vertices.append(old_vertex);
+                "622";
+                if (px[">"](0) && py[">"](0)) {
+                    "623";
+                    pixel = self.existing_quads.pypop();
+                    "624";
+                    pixel.v0 = ρσ_getitem(current_col, py);
+                    "625";
+                    pixel.v1 = ρσ_getitem(current_col, py["-"](1["*"](1)));
+                    "626";
+                    pixel.v2 = ρσ_getitem(previous_col, py["-"](1["*"](1)));
+                    "627";
+                    pixel.v3 = ρσ_getitem(previous_col, py);
+                    "628";
+                    pixel.visible = true;
+                    "629";
+                    self.rendered_quads.append(pixel);
+                }
+            }
+            "632";
+            previous_col = current_col.slice(0);
+        }
+        "635";
+        self.loaded = true;
+        "636";
+        loading_text.visible = false;
+        "637";
+        scene.range = self.height["/"](2);
+        "638";
+        (await sleep(.1));
+    };
+    if (!Mandelbrot.prototype.__load_new_mandelbrot.__module__) Object.defineProperties(Mandelbrot.prototype.__load_new_mandelbrot, {
+        __module__ : {value: null}
+    });
+    Mandelbrot.prototype.change_parameters = async function change_parameters() {
+        var self = this;
+        var max_iter = (arguments[0] === undefined || ( 0 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? change_parameters.__defaults__.max_iter : arguments[0];
+        var image_dimensions = (arguments[1] === undefined || ( 1 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? change_parameters.__defaults__.image_dimensions : arguments[1];
+        var resolution = (arguments[2] === undefined || ( 2 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? change_parameters.__defaults__.resolution : arguments[2];
+        var colormap = (arguments[3] === undefined || ( 3 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? change_parameters.__defaults__.colormap : arguments[3];
+        var ρσ_kwargs_obj = arguments[arguments.length["-"](1)];
+        if (ρσ_kwargs_obj === null || typeof ρσ_kwargs_obj !== "object" || ρσ_kwargs_obj [ρσ_kwargs_symbol] !== true) ρσ_kwargs_obj = {};
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "max_iter")){
+            max_iter = ρσ_kwargs_obj.max_iter;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "image_dimensions")){
+            image_dimensions = ρσ_kwargs_obj.image_dimensions;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "resolution")){
+            resolution = ρσ_kwargs_obj.resolution;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "colormap")){
+            colormap = ρσ_kwargs_obj.colormap;
+        }
+        var ρσ_ls, previous_load_size, fresh_load_size;
+        "657";
+        self.loaded = false;
+        "658";
+        (await self.__recycle_old_vertices());
+        "661";
+        self.max_iter = max_iter;
+        "662";
+        self.x_min = ρσ_getitem(image_dimensions, 0);
+        "663";
+        self.x_max = ρσ_getitem(image_dimensions, 1);
+        "664";
+        self.y_min = ρσ_getitem(image_dimensions, 2);
+        "665";
+        self.y_max = ρσ_getitem(image_dimensions, 3);
+        "666";
+        self.height = ρσ_getitem(resolution, 0);
+        "667";
+        self.width = ρσ_getitem(resolution, 1);
+        "668";
+        self.colormap = colormap;
+        "669";
+        self.dimensions_undo_list.append(image_dimensions);
+        "672";
+        dimensions_display_winput.text = ""["+"](ρσ_str.format("{}", self.x_min))["+"](", ")["+"](ρσ_str.format("{}", self.x_max))["+"](", ")["+"](ρσ_str.format("{}", self.y_min))["+"](", ")["+"](ρσ_str.format("{}", self.y_max))["+"]("");
+        "675";
+        previous_load_size = len(self.existing_vertices);
+        "676";
+        fresh_load_size = self.height["*"](self.width)["-"](1["*"](previous_load_size));
+        "677";
+        (await self.__load_fresh_objects(fresh_load_size));
+        "680";
+        (await self.__load_new_mandelbrot());
+    };
+    if (!Mandelbrot.prototype.change_parameters.__defaults__) Object.defineProperties(Mandelbrot.prototype.change_parameters, {
+        __defaults__ : {value: {max_iter:100, image_dimensions:ρσ_list_decorate([ 1["-u"]()["*"](2), .5, 1["-u"]()["*"](1), 1 ]), resolution:ρσ_list_decorate([ 30, 45 ]), colormap:"default"}},
+        __handles_kwarg_interpolation__ : {value: true},
+        __argnames__ : {value: ["max_iter", "image_dimensions", "resolution", "colormap"]},
+        __module__ : {value: null}
+    });
+    Mandelbrot.prototype.__recycle_old_vertices = async function __recycle_old_vertices() {
+        var self = this;
+        var ρσ_ls, vertex, quad;
+        "692";
+        var ρσ_Iter4 = self.rendered_vertices;
+        ρσ_Iter4 = ((typeof ρσ_Iter4[Symbol.iterator] === "function") ? (ρσ_Iter4 instanceof Map ? ρσ_Iter4.keys() : ρσ_Iter4) : Object.keys(ρσ_Iter4));
+        for (var ρσ_Index4 of ρσ_Iter4) {
+            vertex = ρσ_Index4;
+            "693";
+            self.existing_vertices.append(vertex);
+        }
+        "696";
+        var ρσ_Iter5 = self.rendered_quads;
+        ρσ_Iter5 = ((typeof ρσ_Iter5[Symbol.iterator] === "function") ? (ρσ_Iter5 instanceof Map ? ρσ_Iter5.keys() : ρσ_Iter5) : Object.keys(ρσ_Iter5));
+        for (var ρσ_Index5 of ρσ_Iter5) {
+            quad = ρσ_Index5;
+            "697";
+            self.existing_quads.append(quad);
+            "698";
+            quad.visible = false;
+        }
+        "701";
+        self.rendered_vertices = ρσ_list_decorate([]);
+        "702";
+        self.rendered_quads = ρσ_list_decorate([]);
+    };
+    if (!Mandelbrot.prototype.__recycle_old_vertices.__module__) Object.defineProperties(Mandelbrot.prototype.__recycle_old_vertices, {
+        __module__ : {value: null}
+    });
+    Mandelbrot.prototype.load_recent_dimensions = async function load_recent_dimensions() {
+        var self = this;
+        var redo = (arguments[0] === undefined || ( 0 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? load_recent_dimensions.__defaults__.redo : arguments[0];
+        var max_iter = (arguments[1] === undefined || ( 1 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? load_recent_dimensions.__defaults__.max_iter : arguments[1];
+        var image_dimensions = (arguments[2] === undefined || ( 2 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? load_recent_dimensions.__defaults__.image_dimensions : arguments[2];
+        var resolution = (arguments[3] === undefined || ( 3 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? load_recent_dimensions.__defaults__.resolution : arguments[3];
+        var colormap = (arguments[4] === undefined || ( 4 === arguments.length["-"](1) && arguments[arguments.length["-"](1)] !== null && typeof arguments[arguments.length["-"](1)] === "object" && arguments[arguments.length["-"](1)] [ρσ_kwargs_symbol] === true)) ? load_recent_dimensions.__defaults__.colormap : arguments[4];
+        var ρσ_kwargs_obj = arguments[arguments.length["-"](1)];
+        if (ρσ_kwargs_obj === null || typeof ρσ_kwargs_obj !== "object" || ρσ_kwargs_obj [ρσ_kwargs_symbol] !== true) ρσ_kwargs_obj = {};
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "redo")){
+            redo = ρσ_kwargs_obj.redo;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "max_iter")){
+            max_iter = ρσ_kwargs_obj.max_iter;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "image_dimensions")){
+            image_dimensions = ρσ_kwargs_obj.image_dimensions;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "resolution")){
+            resolution = ρσ_kwargs_obj.resolution;
+        }
+        if (Object.prototype.hasOwnProperty.call(ρσ_kwargs_obj, "colormap")){
+            colormap = ρσ_kwargs_obj.colormap;
+        }
+        var ρσ_ls, image_dimensions_to_load;
+        "723";
+        self.loaded = false;
+        "725";
+        if (redo) {
+            "726";
+            if (len(self.dimensions_redo_list)[">"](0)) {
+                "727";
+                image_dimensions_to_load = self.dimensions_redo_list.pypop();
+                "728";
+            } else {
+                "729";
+                return;
+                "730";
+            }
+        } else {
+            "731";
+            if (len(self.dimensions_undo_list)["<="](1)) {
+                "732";
+                return;
+            }
+            "733";
+            self.dimensions_redo_list.append(self.dimensions_undo_list.pypop());
+            "734";
+            image_dimensions_to_load = self.dimensions_undo_list.pypop();
+        }
+        "737";
+        ρσ_interpolate_kwargs.call(self, self.change_parameters, [ρσ_desugar_kwargs({max_iter: max_iter, image_dimensions: image_dimensions_to_load, resolution: resolution, colormap: colormap})]);
+    };
+    if (!Mandelbrot.prototype.load_recent_dimensions.__defaults__) Object.defineProperties(Mandelbrot.prototype.load_recent_dimensions, {
+        __defaults__ : {value: {redo:false, max_iter:100, image_dimensions:ρσ_list_decorate([ 1["-u"]()["*"](2), .5, 1["-u"]()["*"](1), 1 ]), resolution:ρσ_list_decorate([ 30, 45 ]), colormap:"default"}},
+        __handles_kwarg_interpolation__ : {value: true},
+        __argnames__ : {value: ["redo", "max_iter", "image_dimensions", "resolution", "colormap"]},
+        __module__ : {value: null}
+    });
+    Mandelbrot.prototype.__load_fresh_objects = async function __load_fresh_objects(fresh_load_size) {
+        var self = this;
+        var ρσ_ls, blank_vertex, blank_quad, i;
+        "761";
+        scene.range = 10;
+        "762";
+        loading_text.visible = true;
+        "763";
+        (await sleep(.1));
+        "765";
+        for (var ρσ_Index6 = 0; ρσ_Index6["<"](fresh_load_size); ρσ_Index6++) {
+            i = ρσ_Index6;
+            "767";
+            blank_vertex = ρσ_interpolate_kwargs.call(this, vertex, [ρσ_desugar_kwargs({pos: vec(0, 0, 0), color: vec(0, 0, 0), normal: vec(0, 0, 1), emmisive: true, shininess: 0})]);
+            "774";
+            self.existing_vertices.append(blank_vertex);
+            "777";
+            if (len(self.existing_quads)["<"](self.height["-"](1["*"](1))["*"](self.width))) {
+                "778";
+                blank_quad = ρσ_interpolate_kwargs.call(this, quad, [ρσ_desugar_kwargs({v0: blank_vertex, v1: blank_vertex, v2: blank_vertex, v3: blank_vertex, visible: false})]);
+                "785";
+                self.existing_quads.append(blank_quad);
+            }
+        }
+        "787";
+        (await sleep(.01));
+    };
+    if (!Mandelbrot.prototype.__load_fresh_objects.__argnames__) Object.defineProperties(Mandelbrot.prototype.__load_fresh_objects, {
+        __argnames__ : {value: ["fresh_load_size"]},
+        __module__ : {value: null}
+    });
+    Mandelbrot.prototype.__repr__ = async function __repr__() {
+                return "<"["+"](__name__)["+"](".")["+"](this.constructor.name)["+"](" #")["+"](this.ρσ_object_id)["+"](">");
+    };
+    Mandelbrot.prototype.__str__ = async function __str__() {
+        return this.__repr__();
+    };
+    Object.defineProperty(Mandelbrot.prototype, "__bases__", {value: []});
+    
+    
+    
+    
+    
+    
+
+    "800";
+    resolution_choices = ρσ_list_decorate([ ρσ_list_decorate([ 30, 45 ]), ρσ_list_decorate([ 60, 90 ]), ρσ_list_decorate([ 120, 180 ]), ρσ_list_decorate([ 180, 270 ]), ρσ_list_decorate([ 240, 360 ]), ρσ_list_decorate([ 480, 720 ]) ]);
+    "803";
+    resolution_choices_str = ρσ_list_decorate([ "30x45", "60x90", "120x180", "180x270", "240x360", "480x720" ]);
+    "808";
+    colormap_choices = ρσ_list_decorate([ "default", "inferno", "viridis", "spectral", "plasma" ]);
+    "811";
+    mouse_1_up = true;
+    "814";
+    loading_text = ρσ_interpolate_kwargs.call(this, text, [ρσ_desugar_kwargs({text: "Loading :)", align: "center", color: color.white, visible: false})]);
+    "817";
+    _GS_1 = new Mandelbrot;
+    ρσ_interpolate_kwargs.call(_GS_1, _GS_1.__init__, [ρσ_desugar_kwargs({resolution: ρσ_getitem(resolution_choices, 3)})]);
+    mandelbrot = _GS_1;
+    "822";
+    screenshot_button = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({text: "Screenshot", pos: scene.title_anchor, background: color.white, bind: screen_capture})]);
+    "830";
+    undo_dimension_change_button = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({text: "Undo", pos: scene.title_anchor, background: vec(.8, .8, .8), bind: recall_mandelbrot_dimensions, button_title: ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "  ", pos: scene.title_anchor})]), redo: false, pointer_to_redo: null})]);
+    "841";
+    redo_dimension_change_button = ρσ_interpolate_kwargs.call(this, button, [ρσ_desugar_kwargs({text: "Redo", pos: scene.title_anchor, background: vec(.8, .8, .8), bind: recall_mandelbrot_dimensions, button_title: ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "  ", pos: scene.title_anchor})]), redo: true, pointer_to_undo: undo_dimension_change_button})]);
+    "852";
+    undo_dimension_change_button.pointer_to_redo = redo_dimension_change_button;
+    "856";
+    colormap_menu = ρσ_interpolate_kwargs.call(this, menu, [ρσ_desugar_kwargs({choices: colormap_choices, selected: ρσ_getitem(colormap_choices, 0), pos: scene.title_anchor, bind: change_colormap, menu_title: ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "<b> Colormap:</b> ", pos: scene.title_anchor})])})]);
+    "865";
+    image_resolution_menu = ρσ_interpolate_kwargs.call(this, menu, [ρσ_desugar_kwargs({choices: resolution_choices_str, selected: ρσ_getitem(resolution_choices_str, 3), pos: scene.title_anchor, bind: change_resolution, menu_title: ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "<b> Resolution:</b> ", pos: scene.title_anchor})])})]);
+    (await sleep(.1));
+    "874";
+    mandel_search_depth_winput = ρσ_interpolate_kwargs.call(this, winput, [ρσ_desugar_kwargs({type: "numeric", width: 30, height: 20, text: mandelbrot.max_iter, pos: scene.title_anchor, bind: change_search_depth, title_wtext_obj: ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "  <b>Depth:</b>", pos: scene.title_anchor})]), suffix_wtext_obj: null, obj_type: "winput"})]);
+    "887";
+    mandel_search_depth_winput.suffix_wtext_obj = ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: " iterations", pos: scene.title_anchor})]);
+    (await sleep(.1));
+    "893";
+    dimensions_display_winput = ρσ_interpolate_kwargs.call(this, winput, [ρσ_desugar_kwargs({type: "string", width: 650, height: 20, text: ""["+"](ρσ_str.format("{}", mandelbrot.x_min))["+"](", ")["+"](ρσ_str.format("{}", mandelbrot.x_max))["+"](", ")["+"](ρσ_str.format("{}", mandelbrot.y_min))["+"](", ")["+"](ρσ_str.format("{}", mandelbrot.y_max))["+"](""), pos: scene.title_anchor, bind: change_image_dimensions, title_wtext_obj: ρσ_interpolate_kwargs.call(this, wtext, [ρσ_desugar_kwargs({text: "\n<b>Current image dimensions (x min/max, y min/max):</b> ", pos: scene.title_anchor})])})]);
+};
+if (!__main__.__module__) Object.defineProperties(__main__, {
+    __module__ : {value: null}
+});
+
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>
