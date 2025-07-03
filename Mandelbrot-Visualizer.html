@@ -76,7 +76,7 @@ async function __main__() {
 
     strings();
     "15";
-    scene = ρσ_interpolate_kwargs.call(this, display, [ρσ_desugar_kwargs({width: 900, height: 600})]);
+    scene = ρσ_interpolate_kwargs.call(this, canvas, [ρσ_desugar_kwargs({width: 900, height: 600})]);
     "16";
     scene.bind("mousedown", resize_box);
     "17";
@@ -94,8 +94,6 @@ async function __main__() {
     about_me = "\n            Highlight an area to zoom using <b>left-click and drag<\/b>. To go back to the \n    previous view, click <b>Undo</b>, or use <b>Redo</b> to step forward again. Higher image\n    resolutions are computationally expensive. If loading takes too long, try selecting a \n    lower resolution for faster rendering. You can also adjust the <b>Depth</b>, which sets\n    how many iterations are used to determine whether a point escapes the Mandelbrot set. \n    Higher values reveal finer detail but increase render time—though not as drastically as\n    higher resolutions do. When zooming, the white frame represents the new region which \n    will be zoomed into.\n\n            I've recreated some of my favorite MATLAB colormaps here. One of them—my \n    \"spectral\" scheme—is custom made and looks especially vivid at high iteration \n    depths. As you continue zooming, you'll eventually reach a limit where the image \n    breaks into large pixels, followed by a smooth, empty void. This boundary is due \n    to floating-point precision limits. I've implemented a few techniques to extend \n    this range, but a more robust fix would require a high-precision JS math library. \n    Since that would slow everything down and isn't the goal of this project, I've \n    left it out for now. I would be open to implementing this as well as the option\n    to view other types of Mandelbrot sets.\n\n    I'll add a GitHub link here later.\n\n                -<i>Created by Maximillian DeMarr</i>\n";
     "48";
     scene.caption = about_me;
-    "49";
-    MathJax.Hub.Queue(ρσ_list_decorate([ "Typeset", MathJax.Hub, scene.caption ]));
     "50";
     scene.append_to_title("<div id='fps'/>");
     "64";
