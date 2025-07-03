@@ -9,11 +9,15 @@ Future work ideas:
 - Pan around region feature
 
 Last major update 2025/06/26.
+
+This Python file is intended as a raw save of the Python code. It is not intended to be
+runnable. If you would like to run the program, then access the Glowscript link in the 
+readme.
 """
 
 # ================================= Canvas =====================================
 
-scene = display(width = 900, height = 600)
+scene = canvas(width = 900, height = 600)
 scene.bind('mousedown', resize_box)
 scene.bind('mouseup', release_mouse_1)
 scene.userzoom = False
